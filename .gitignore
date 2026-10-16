@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Data (re-downloadable, can get large)
+data/raw/
+*.csv
+!data/processed/sample.csv
+
+# OS junk
+.DS_Store
