@@ -11,7 +11,7 @@ def split_by_date(df, cutoff='2025-01-01'):
 
     return train, test
 
-CATEGORICAL_COLS = ['day_of_week', 'month', 'is_holiday']
+CATEGORICAL_COLS = ['day_of_week', 'month', 'station']
 
 def fit_one_hot(train, cols=CATEGORICAL_COLS):
     return {col: sorted(train[col].dropna().unique()) for col in cols}
