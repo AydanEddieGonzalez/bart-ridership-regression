@@ -1,5 +1,9 @@
 # Bart Ridership Regression
 
+## Goal
+
+I am modeling how many people exit a BART station on a given day. Ridership depends on stuff like day of the week, weather, holidays, and where the station is. Let's say if it rains on a random Tuesday, I am trying to predict what effect that has on the amount of people exiting a certain station, if they will choose to exit sooner or later.
+
 ## Data
 
 Raw data is not committed (too large). To reproduce `data/processed/bart_daily.csv`:
