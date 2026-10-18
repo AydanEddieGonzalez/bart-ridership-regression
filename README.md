@@ -1,6 +1,6 @@
-# Bart Ridership Regression
+# BART Ridership Regression
 
-I am modeling how many people exit a BART station on a given day. Ridership depends on stuff like day of the week, weather, holidays, and where the station is. Let's say if it rains on a random Tuesday, I am trying to predict what effect that has on the amount of people exiting a certain station, if they will choose to exit sooner or later. I will do this through a multiple linear regression model.
+I am modeling how many people exit a BART station on a given day. Ridership depends on stuff like day of the week, weather, holidays, and where the station is. For example, if it rains on a random Tuesday, how many fewer people exit at a certain station? I will do this through a multiple linear regression model.
 
 ## Data
 
@@ -14,8 +14,8 @@ Raw data is not committed (too large). To reproduce `data/processed/bart_daily.c
 3. **Holidays:** US federal holidays from the `holidays` Python package.
 4. Run `notebooks/01_eda.ipynb` top to bottom.
 
-**Final dataset:** daily exits for the 8 busiest stations, Jan 2024 to Dec 2025
-(about 5,800 rows).
+**Final dataset:** daily exits for the 8 busiest stations, Jan 1, 2024 to Dec 31, 2025
+(5,848 rows: 8 stations × 731 days, no missing values or duplicates).
 
 ### Stations
 
@@ -53,11 +53,11 @@ I implemented a total of 27 features. I did not use `date` as a feature since th
 | `is_holiday` | Binary | 1 if a US federal holiday, else 0 | None |
 | `day_of_week_*` | One-hot (6 columns) | Day of week | Baseline: Friday |
 | `month_*` | One-hot (11 columns) | Month (2 to 12) | Baseline: January |
-| `station_*` | One-hot (7 columns) | BART station code | Baseline: [FIRST STATION CODE] |
+| `station_*` | One-hot (7 columns) | BART station code | Baseline: `12TH` |
 
 ## Preprocessing
 
-All preprocessing is in `src/inreg/preprocessing.py` and follows a **fit/transform** pattern: anything the pipline learns (category lists, means, standard deviations) is learned from training set only, then applied to both train and test.
+All preprocessing is in `src/linreg/preprocessing.py` and follows a **fit/transform** pattern: anything the pipeline learns (category lists, means, standard deviations) is learned from training set only, then applied to both train and test.
 
 ## The math
 
