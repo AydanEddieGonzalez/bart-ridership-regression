@@ -58,3 +58,59 @@ I implemented a total of 27 features. I did not use `date` as a feature since th
 ## Preprocessing
 
 All preprocessing is in `src/inreg/preprocessing.py` and follows a **fit/transform** pattern: anything the pipline learns (category lists, means, standard deviations) is learned from training set only, then applied to both train and test.
+
+## The math
+
+**Design matrix.** We use a matrix because there are multiple $b$ values in the linear regression (one for each feature), so instead of solving for each one separately, we solve for all of them at once to find the line of best fit. Each row of $X$ is one station-day and each column is one feature. The first column is all 1s, because that's the $a$ value (the intercept) in the linear regression. Multiplying it by 1 in every row adds it to every prediction.
+
+$n$ is the number of equations we have, and $d$ is the number of variables. For the training data, $n = 366 \times 8 = 2928$ and $d = 27$, so with the column of 1s, $X$ is $2928 \times 28$ and $\theta$ is $28 \times 1$. The predictions are:
+
+$$
+\hat{y} = X\theta
+$$
+
+which gives one prediction per row.
+
+**Gradient.** The loss is:
+
+$$
+J(\theta) = \frac{1}{2n}\left\| X\theta - y \right\|^2
+$$
+
+To find the gradient for one coefficient $\theta_j$, we use the chain rule, and the 2 from it cancels the $\frac{1}{2}$ in the loss. What's left is the error times the value of feature $j$, averaged over every row:
+
+$$
+\frac{\partial J}{\partial \theta_j} = \frac{1}{n}\sum_{i=1}^{n} \left(\hat{y}_i - y_i\right) x_{i,j}
+$$
+
+This gives one number per coefficient, and then $\theta_j$ is updated once. If the model is overestimating, $\theta_j$ decreases, and if it's underestimating, it increases. Doing this for every coefficient at once gives:
+
+$$
+\nabla J(\theta) = \frac{1}{n} X^\top \left(X\theta - y\right)
+$$
+
+The update is:
+
+$$
+\theta \leftarrow \theta - \alpha \nabla J(\theta)
+$$
+
+where the learning rate $\alpha$ is the step size. It stays fixed, but the steps get smaller as the errors shrink.
+
+**Normal equation.** At the best fit, the gradient is zero, so:
+
+$$
+X^\top X \theta = X^\top y \quad \Longrightarrow \quad \theta = \left(X^\top X\right)^{-1} X^\top y
+$$
+
+This only works if $X$ has full column rank, meaning no free variables. If a column can be made from the others (multicollinearity), there are infinitely many answers and the inverse doesn't exist. That's why we dropped one dummy variable per category, since keeping all 7 weekday columns would add up to the column of 1s.
+
+**Three types of gradient descent.** We're doing all three and comparing them with each other and with the normal equation, which gives the exact answer. The difference is how many rows are used for each update:
+
+| Type | Rows per update | Behavior |
+|---|---|---|
+| Batch | All 2,928 | Smooth but slow |
+| Stochastic (SGD) | 1 random row | Updates much more often, but noisy |
+| Mini-batch | Small groups (e.g. 32) | In between |
+
+They should all end up close to the normal equation's answer, so the comparison is about how fast and smoothly each one gets there.
