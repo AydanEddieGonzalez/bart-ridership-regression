@@ -114,3 +114,13 @@ This only works if $X$ has full column rank, meaning no free variables. If a col
 | Mini-batch | Small groups (e.g. 32) | In between |
 
 They should all end up close to the normal equation's answer, so the comparison is about how fast and smoothly each one gets there.
+
+
+## Coefficient interpretation
+
+1. When looking at the biggest drop, when there is a holiday, we lose on average about 4,500 people exiting per station that day, so holidays have fewer people exiting the BART.
+2. Monday and Friday have roughly the same amount of exits, as we saw in the average daily BART exits by day of week plot. Tuesday through Thursday have about 2,000 more people exiting each station.
+3. Stations EMBR, MONT, POWL, and CIVC are the ones that deviate from 12TH the most, meaning they are the ones with the most people exiting per day. The biggest factor for the amount of people exiting is the station itself, with 12TH having the least amount of people exiting.
+4. September and October are the busiest, so around those times more people will be exiting the stations. December, January, and July have the least amount of exits, which makes sense since a lot of holidays and breaks happen around those times.
+5. The weather plays a small role, since rain only decreases exits by about 184 per station.
+6. The model gives every station the same drop. For example, Sunday has on average a nearly 4,000 exit drop per station, but in reality the drop would probably be proportional to how many people exit that station on a normal day.
